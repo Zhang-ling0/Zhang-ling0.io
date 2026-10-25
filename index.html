@@ -3,182 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zhang-ling0 的个人知识库</title>
+    <title>Zhang-ling0 | 技术知识库</title>
+    <!-- 引入 Markdown 解析库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- 引入代码高亮库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
     <style>
-        /* 全局样式：深色背景、无衬线字体 */
+        /* 之前的高级毛玻璃 UI 样式 */
         :root {
-            --bg-color: #0d1117;
-            --text-main: #c9d1d9;
-            --text-muted: #8b949e;
-            --accent-color: #4CAF50;
-            --card-bg: #161b22;
-            --card-border: #30363d;
+            --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --accent: #10b981;
         }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            margin: 0;
-            padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-primary);
             min-height: 100vh;
-        }
-
-        /* 主容器 */
-        .container {
-            max-width: 800px;
-            width: 90%;
-            padding: 40px 20px;
-        }
-
-        /* 头部介绍区 */
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        .header h1 {
-            font-size: 2.5rem;
-            color: #ffffff;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-        }
-        .header h1 span {
-            color: var(--accent-color);
-        }
-        .header p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* 状态标签 */
-        .badge {
-            display: inline-block;
-            background-color: rgba(76, 175, 80, 0.1);
-            color: var(--accent-color);
-            border: 1px solid rgba(76, 175, 80, 0.3);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-top: 15px;
-            font-weight: 500;
-        }
-
-        /* 卡片网格 */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        /* 单个卡片样式 */
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 24px;
-            text-decoration: none;
-            color: var(--text-main);
-            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
-            position: relative;
-            overflow: hidden;
+            align-items: center;
+            padding: 40px 20px;
+            line-height: 1.6;
         }
-        .card:hover {
-            border-color: var(--accent-color);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-        }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         
-        /* 卡片顶部的装饰线 */
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        .wrapper { max-width: 1000px; width: 100%; margin-top: 5vh; }
+        
+        /* 主页样式 */
+        .header { text-align: center; margin-bottom: 60px; animation: fadeInDown 1s ease-out; }
+        .header h1 { font-size: 3rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 15px; }
+        .header h1 span { background: linear-gradient(to right, #10b981, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header p { color: var(--text-secondary); font-size: 1.15rem; max-width: 600px; margin: 0 auto 20px; }
+        .tag { display: inline-block; background: rgba(16, 185, 129, 0.1); color: var(--accent); border: 1px solid rgba(16, 185, 129, 0.2); padding: 6px 16px; border-radius: 30px; font-size: 0.9rem; font-weight: 500; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 60px; animation: fadeInUp 1s ease-out 0.2s both; }
+        .card { background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 30px; text-decoration: none; color: var(--text-primary); transition: all 0.4s ease; position: relative; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; }
+        .card:hover { transform: translateY(-8px); border-color: rgba(255, 255, 255, 0.25); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); }
+        .card-icon { font-size: 2.5rem; margin-bottom: 20px; display: inline-block; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 12px; align-self: flex-start; }
+        .card h3 { font-size: 1.4rem; margin-bottom: 12px; font-weight: 600; }
+        .card p { color: var(--text-secondary); font-size: 0.95rem; flex-grow: 1; }
+        .card.disabled { opacity: 0.6; cursor: default; filter: grayscale(100%); }
+        .card.disabled:hover { transform: none; border-color: var(--glass-border); box-shadow: none; }
+        
+        .footer { text-align: center; color: var(--text-secondary); font-size: 0.9rem; padding-top: 20px; border-top: 1px solid var(--glass-border); animation: fadeInUp 1s ease-out 0.4s both; }
+
+        /* 🌟 阅读器界面样式 🌟 */
+        #reader-view {
+            display: none; /* 默认隐藏 */
             width: 100%;
-            height: 3px;
-            background-color: var(--accent-color);
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            max-width: 800px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 20px;
+            animation: fadeInUp 0.5s ease-out;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
-        .card:hover::before {
-            opacity: 1;
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--accent);
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
         }
+        .back-btn:hover { text-decoration: underline; }
+        
+        /* Markdown 内部排版美化 */
+        #markdown-content { line-height: 1.8; color: #d1d5db; }
+        #markdown-content h1, #markdown-content h2, #markdown-content h3 { color: #ffffff; margin-top: 1.5em; margin-bottom: 0.8em; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.3em; }
+        #markdown-content h1 { font-size: 2rem; }
+        #markdown-content p { margin-bottom: 1.2em; }
+        #markdown-content ul, #markdown-content ol { margin-bottom: 1.2em; padding-left: 2em; }
+        #markdown-content li { margin-bottom: 0.5em; }
+        #markdown-content code { background: rgba(255,255,255,0.1); padding: 0.2em 0.4em; border-radius: 4px; font-family: monospace; }
+        #markdown-content pre { background: #161b22; padding: 15px; border-radius: 8px; overflow-x: auto; margin-bottom: 1.2em; border: 1px solid var(--glass-border); }
+        #markdown-content pre code { background: transparent; padding: 0; color: #e5e7eb; }
+        #markdown-content blockquote { border-left: 4px solid var(--accent); padding-left: 15px; color: var(--text-secondary); margin-bottom: 1.2em; background: rgba(16, 185, 129, 0.05); }
 
-        .card-icon {
-            font-size: 2rem;
-            margin-bottom: 15px;
-        }
-        .card h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.25rem;
-            color: #ffffff;
-        }
-        .card p {
-            margin: 0;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            flex-grow: 1;
-        }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 底部版权 */
-        .footer {
-            text-align: center;
-            margin-top: 60px;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            padding-top: 20px;
-            border-top: 1px solid var(--card-border);
+        @media (max-width: 600px) {
+            .header h1 { font-size: 2.2rem; }
+            .card { padding: 24px; }
+            #reader-view { padding: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- 头部区域 -->
+    <div class="wrapper" id="home-view">
         <div class="header">
-            <h1>Zhang-ling0 的<span>知识库</span></h1>
-            <p>专注 C++ 后端开发、AI 大模型应用与 Linux 系统编程。这里记录了我的学习笔记与项目实战经验。</p>
-            <div class="badge">🌱 持续学习与更新中</div>
+            <h1>Zhang-ling0 的<span>技术空间</span></h1>
+            <p>专注 C++ 后端开发、AI 大模型应用与 Linux 系统编程。</p>
+            <div class="tag">🌱 保持热爱，持续输出</div>
         </div>
 
-        <!-- 笔记卡片列表 -->
         <div class="grid">
-            
-            <!-- 卡片 1：MySQL 笔记 -->
-            <a href="./src/site/notes/2026-10-10%20数据库基础.md" class="card">
+            <!-- 注意这里的 onclick 事件，它负责拦截跳转，直接加载笔记 -->
+            <div class="card" onclick="loadMarkdown('./notes/2026-10-10%20数据库基础.md')">
                 <div class="card-icon">🗄️</div>
                 <h3>MySQL 数据库基础</h3>
-                <p>包含数据库的基本概念、编码设置与基础操作指南。</p>
-            </a>
-
-            <!-- 卡片 2：占位符（你可以后续添加更多） -->
-            <div class="card" style="opacity: 0.6; cursor: not-allowed;">
-                <div class="card-icon">💻</div>
-                <h3>C++ 后端开发笔记</h3>
-                <p>（敬请期待）Linux 系统编程、网络编程与高并发服务器设计。</p>
+                <p>包含数据库的基本概念、编码设置与基础操作指南，夯实底层基础。</p>
             </div>
 
-            <!-- 卡片 3：占位符 -->
-            <div class="card" style="opacity: 0.6; cursor: not-allowed;">
+            <div class="card disabled">
+                <div class="card-icon">💻</div>
+                <h3>C++ 后端开发</h3>
+                <p>（内容筹备中）Linux 系统编程、网络编程与高并发服务器设计。</p>
+            </div>
+
+            <div class="card disabled">
                 <div class="card-icon">🤖</div>
                 <h3>AI 与大模型实践</h3>
-                <p>（敬请期待）LangChain 应用开发与本地大模型部署踩坑记录。</p>
+                <p>（内容筹备中）LangChain 应用开发与本地大模型部署踩坑记录。</p>
             </div>
-
         </div>
 
-        <!-- 底部 -->
         <div class="footer">
-            © 2026 Zhang-ling0. Built with ❤️ and GitHub Pages.
+            © 2026 Zhang-ling0. Designed with ❤️ and Codex.
         </div>
     </div>
 
+    <!-- 阅读器视图（默认隐藏，点击卡片后显示） -->
+    <div class="wrapper" id="reader-view">
+        <a class="back-btn" onclick="showHome()">← 返回主页</a>
+        <div id="markdown-content">
+            正在加载笔记内容...
+        </div>
+    </div>
+
+    <script>
+        // 加载并渲染 Markdown
+        async function loadMarkdown(url) {
+            try {
+                // 隐藏主页，显示阅读器
+                document.getElementById('home-view').style.display = 'none';
+                document.getElementById('reader-view').style.display = 'block';
+                document.getElementById('markdown-content').innerHTML = '加载中...';
+                
+                // 请求 md 文件内容
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('网络错误，找不到文件');
+                const text = await response.text();
+                
+                // 使用 marked.js 转换并渲染
+                const html = marked.parse(text);
+                document.getElementById('markdown-content').innerHTML = html;
+                
+                // 触发代码高亮
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+
+                // 滚动到顶部
+                window.scrollTo(0, 0);
+            } catch (error) {
+                document.getElementById('markdown-content').innerHTML = 
+                    `<h2 style="color:red;">加载失败</h2><p>请检查文件路径是否正确。错误信息：${error.message}</p>`;
+            }
+        }
+
+        // 返回主页
+        function showHome() {
+            document.getElementById('reader-view').style.display = 'none';
+            document.getElementById('home-view').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+    </script>
 </body>
 </html>
