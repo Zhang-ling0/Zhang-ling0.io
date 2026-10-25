@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>2026-10-10 数据库基础</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script async type="module">import mermaid from"https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs"</script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js" integrity="sha512-hpZ5pDCF2bRCweL5WoA0/N1elet1KYL5mx3LP555Eg/0ZguaHawxNvEjF6O3rufAChs16HVNhEc6blF/rZoowQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/autoloader/prism-autoloader.min.js" integrity="sha512-sv0slik/5O0JIPdLBCR2A3XDg/1U3WuDEheZfI/DI5n8Yqc3h5kjrnr46FGBNiUAJF7rE4LHKwQ/SoSLRKAxEA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script async src="https://cdn.jsdelivr.net/npm/lucide@0.115.0/dist/umd/lucide.min.js"></script>
+<script>window.addEventListener("load",(()=>{document.querySelectorAll(".callout").forEach((e=>{const t=getComputedStyle(e).getPropertyValue("--callout-icon"),l=t&&t.trim().replace(/^lucide-/,"");if(l){const t=e.querySelector(".callout-title");if(t){const e=document.createElement("div"),c=document.createElement("i");e.appendChild(c),c.setAttribute("icon-name",l),e.setAttribute("class","callout-icon"),t.insertBefore(e,t.firstChild)}}})),lucide.createIcons(),Array.from(document.querySelectorAll(".callout.is-collapsible")).forEach((e=>{e.querySelector(".callout-title").addEventListener("click",(t=>{e.classList.contains("is-collapsed")?e.classList.remove("is-collapsed"):e.classList.add("is-collapsed")}))}))}))</script>
+<script async src="https://fastly.jsdelivr.net/npm/force-graph@1.43.0/dist/force-graph.min.js"></script>
+<script async src="https://fastly.jsdelivr.net/npm/@alpinejs/persist@3.11.1/dist/cdn.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/alpinejs@3.11.1/dist/cdn.min.js" async></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" integrity="sha512-mIs9kKbaw6JZFfSuo+MovjU+Ntggfoj8RwAmJbVXQ5mkAX5LlgETQEweFPI18humSPHymTb5iikEOKWF7I8ncQ==" crossorigin="anonymous" referrerpolicy="no-referrer" async>
+<script src="https://fastly.jsdelivr.net/npm/whatwg-fetch@3.6.2/dist/fetch.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer" async></script>
+<link href="/styles/digital-garden-base.css" rel="stylesheet">
+<link href="/styles/obsidian-base.css" rel="stylesheet">
+<link href="/styles/_theme.d92311c2.css" rel="stylesheet">
+<link href="/styles/custom-style.css" rel="stylesheet">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<style></style>
+</head>
+<body class="theme-dark markdown-preview-view markdown-rendered markdown-preview-section">
+<nav class="navbar">
+<div class="navbar-inner">
+<a href="/" style="text-decoration:none">
+<h1 style="margin:15px!important">Digital Garden</h1>
+</a>
+</div>
+</nav>
+<main class="content cm-s-obsidian">
+<header>
+<div class="header-meta">
+</div>
+</header>
+<pre><code class="language-table-of-contents"></code></pre>
+<h1 id="1" tabindex="-1">1. 为什么要有数据库？</h1>
+<p>提出问题：我们存储数据使用文件就可以了，为什么还要弄一个数据库？<br>
+文件保存数据有以下几个缺点：</p>
+<ul>
+<li>文件的安全性问题</li>
+<li>文件不利于数据查询和管理</li>
+<li>文件不利于存储海量数据</li>
+<li>文件在程序中的控制很不方便<br>
+一般的文件确实提供了数据的存储功能，但是站在用户的角度文件并没有提供非常好的数据管理能力。<br>
+为了解决文件存储数据所存在的问题，就设计出更加有利于管理数据的东西--数据库，它能更有效的管理数据。数据库的水平是衡量一个程序员水平的重要的指标。<br>
+数据库的存储介质：</li>
+<li>磁盘</li>
+<li>内存</li>
+</ul>
+<h1 id="2" tabindex="-1">2 主流数据库</h1>
+<ul>
+<li>SQL Server： 微软的产品，.Net程序员的最爱，中大型项目。</li>
+<li>Oracle： 甲骨文产品，适合大型项目，复杂的业务逻辑，并发一般来说不如MySQL。</li>
+<li>MySQL：世界上最受欢迎的数据库，属于甲骨文，并发性好，不适合做复杂的业务。主要用在电商，SNS，论坛。对简单的SQL处理效果好。</li>
+<li>PostgreSQL :加州大学伯克利分校计算机系开发的关系型数据库，不管是私用，商用，还是学术研究使用，可以免费使用，修改和分发。</li>
+<li>SQLite： 是一款轻型的数据库，是遵守ACID的关系型数据库管理系统，它包含在一个相对小的C库中。它的设计目标是嵌入式的，而且目前已经在很多嵌入式产品中使用了它，它占用资源非常的低，在嵌入式设备中，可能只需要几百K的内存就够了。</li>
+<li>H2： 是一个用Java开发的嵌入式数据库，它本身只是一个类库，可以直接嵌入到应用项目中。</li>
+</ul>
+<h1 id="3" tabindex="-1">3. 数据库的基本使用</h1>
+<h2 id="3-1" tabindex="-1">3.1 什么是数据库？</h2>
+<p>数据库一般指的是，在磁盘或者内存中存储的特定结构组织的数据的一套方案。</p>
+<blockquote>
+<p>数据库服务--mysqld<br>
+数据库--mysql</p>
+</blockquote>
+<p>数据库本质：对数据内容存储的一套解决方案，你给我字段或者要求，我直接给你结果</p>
+<h2 id="3-2" tabindex="-1">3.2 数据库的基本使用</h2>
+<p>下面我们来见一见数据库：我们使用mysql建立一个数据库并建立一张表结构，在表结构中插入一些数据--对比一下mysql在Linux中是如何表现的</p>
+<ol>
+<li>启动MySQL</li>
+</ol>
+<pre><code class="language-bash">mysql -uroot -p
+</code></pre>
+<ol start="2">
+<li>创建数据库</li>
+</ol>
+<pre><code class="language-SQL">create database helloworld;
+</code></pre>
+<ol start="3">
+<li>查看数据库：</li>
+</ol>
+<pre><code class="language-SQL">show databases;
+</code></pre>
+<blockquote>
+<p>这里需要注意，创建数据库是创建一个数据库database是单数没有s，查看数据库，也就是查看所有的数据库这里是databases这里是有s的。</p>
+</blockquote>
+<ol start="4">
+<li>创建表结构：</li>
+</ol>
+<pre><code class="language-SQL">create table student(
+	id int,
+	name varchar(32),
+	gender varchar(2)
+);
+</code></pre>
+<p>![[创建表结构.png]]<br>
+6. 向表中插入数据</p>
+<pre><code class="language-SQL">insert into student (id, name, gender) values (1, '张三', '男');
+insert into student (id, name, gender) values (2, '李四', '女');
+insert into student (id, name, gender) values (3, '王五', '男');
+</code></pre>
+<ol start="7">
+<li>查询表中的数据</li>
+</ol>
+<pre><code class="language-SQL">select * from student;
+</code></pre>
+<blockquote>
+<p>这里的“<code>*</code>”指的是&quot;所有&quot;的意思</p>
+</blockquote>
+<p>![[数据逻辑存储.png]]</p>
+<h2 id="3-3" tabindex="-1">3.3 数据库的本质</h2>
+<p>建立数据库本质就是在Linux下的/var/lib/mysql根目录下，创建一个文件：<br>
+![[数据库的本质是Linux下的一个目录.png]]<br>
+在数据库里建立表，删除表等操作本质上是对文件进行操作</p>
+<blockquote>
+<p>这里也对应了Linux下一切皆文件</p>
+</blockquote>
+<p>我们使用创建数据库，查看数据库等工作是谁做的？实际上是mysqld服务帮我做的。<br>
+总结一下：<br>
+数据库本质其实也是文件，只不过这些文件并不由程序员直接操作，而是由数据库服务帮我们进行操作的，mysql实际上也是操作系统之上的一套文件系统。</p>
+<h2 id="3-4" tabindex="-1">3.4 服务器、数据库、表关系</h2>
+<ol>
+<li>所谓安装数据库服务器，只是在机器上安装了一个数据库管理程序，这个管理程序可以管理多个数据库，一般的开发人员会针对每一个应用创建数据库</li>
+<li>为保存应用中实体的数据，一般会在数据库中创建多个表，以保存程序中实体的数据。</li>
+<li>数据库服务器，数据库和表的关系如下：<br>
+![[服务器、数据库、表关系.png]]</li>
+</ol>
+<h1 id="4-my-sql" tabindex="-1">4. MySQL架构</h1>
+<p>MySQLMySQL 是一个可移植的数据库，几乎能在当前所有的操作系统上运行，如 Unix/Linux、Windows、Mac 和 Solaris。各种系统在底层实现方面各有不同，但是 MySQL 基本上能保证在各个平台上的物理体系结构的一致性。<br>
+![[MySQL架构.png]]</p>
+<p>最上层是<strong>客户端连接层</strong>（Client Connectors），负责处理各种编程语言的连接请求；第二层是 <strong>MySQL Server 核心层</strong>，包含连接池（处理认证与安全）、SQL 接口（解析 DML/DDL 语句）、解析器（词法与语法分析）、优化器（生成最优执行计划）以及缓存组件；第三层是<strong>可插拔存储引擎层</strong>（如 InnoDB、MyISAM 等），负责底层数据的实际存取；最底层是<strong>文件系统层</strong>，负责将数据、索引及日志（如 Redo Log、Undo Log）持久化到物理磁盘（如 NTFS、ext4）。</p>
+<h1 id="5-sql" tabindex="-1">5. SQL分类</h1>
+<ol>
+<li>DDL数据定义语言(data definition language)：数据定义语言，用来维护存储数据的结构。代表指令：create, drop, alter</li>
+<li>DML数据操纵语言(data manipulation language): 数据操纵语言，用来对数据进行操作。代表指令： insert，delete，update</li>
+</ol>
+<blockquote>
+<p>DML中又单独分了一个DQL，数据查询语言，代表指令： select</p>
+</blockquote>
+<ol start="3">
+<li>DCL数据控制语言(Data Control Language) ：主要负责权限管理和事务代表指令： grant，revoke，commit</li>
+</ol>
+<h1 id="6-sql" tabindex="-1">6. 查看SQL语言的存储引擎</h1>
+<p>存储引擎是：数据库管理系统如何存储数据、如何为存储的数据建立索引和如何更新、查询数据等技术的实现方法。<br>
+<strong>MySQL的核心就是插件式存储引擎，支持多种存储引擎</strong></p>
+<h2 id="6-1" tabindex="-1">6.1 查看存储引擎</h2>
+<pre><code class="language-SQL">show engines;
+</code></pre>
+<p>![[查看数据库引擎.png]]</p>
+<h2 id="6-2" tabindex="-1">6.2 存储引擎对比</h2>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align:left">特性 (Feature)</th>
+<th style="text-align:left">MyISAM</th>
+<th style="text-align:left">BDB</th>
+<th style="text-align:left">Memory</th>
+<th style="text-align:left">InnoDB</th>
+<th style="text-align:left">Archive</th>
+<th style="text-align:left">NDB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>存储限制 (Storage Limits)</strong></td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">有</td>
+<td style="text-align:left">64TB</td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">有</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>事务支持 (Transactions: commit, rollback 等)</strong></td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>锁定粒度 (Locking granularity)</strong></td>
+<td style="text-align:left">表级</td>
+<td style="text-align:left">页级</td>
+<td style="text-align:left">表级</td>
+<td style="text-align:left">行级</td>
+<td style="text-align:left">行级</td>
+<td style="text-align:left">行级</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>多版本并发控制/快照读 (MVCC/Snapshot Read)</strong></td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>地理空间数据支持 (Geospatial Read)</strong></td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>B树索引 (B-Tree indexes)</strong></td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>哈希索引 (Hash indexes)</strong></td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>全文检索索引 (Full text search index)</strong></td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>聚簇索引 (Clustered index)</strong></td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>数据缓存 (Data Caches)</strong></td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>索引缓存 (Index Caches)</strong></td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>数据压缩 (Compressed data)</strong></td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>数据加密（通过函数）(Encrypted data)</strong></td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>存储成本（空间占用）(Storage cost)</strong></td>
+<td style="text-align:left">低 (Low)</td>
+<td style="text-align:left">低 (Low)</td>
+<td style="text-align:left">不适用 (N/A)</td>
+<td style="text-align:left">高 (High)</td>
+<td style="text-align:left">非常低 (Very Low)</td>
+<td style="text-align:left">低 (Low)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>内存成本 (Memory cost)</strong></td>
+<td style="text-align:left">低 (Low)</td>
+<td style="text-align:left">低 (Low)</td>
+<td style="text-align:left">中等 (Medium)</td>
+<td style="text-align:left">高 (High)</td>
+<td style="text-align:left">低 (Low)</td>
+<td style="text-align:left">高 (High)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>批量插入速度 (Bulk Insert Speed)</strong></td>
+<td style="text-align:left">高 (High)</td>
+<td style="text-align:left">高 (High)</td>
+<td style="text-align:left">高 (High)</td>
+<td style="text-align:left">低 (Low)</td>
+<td style="text-align:left">非常高 (Very High)</td>
+<td style="text-align:left">高 (High)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>集群数据库支持 (Cluster database support)</strong></td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>复制支持 (Replication support)</strong></td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>外键支持 (Foreign key support)</strong></td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">不支持</td>
+<td style="text-align:left">不支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>备份/时间点恢复 (Backup/Point-in-time recovery)</strong></td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>查询缓存支持 (Query cache support)</strong></td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+</tr>
+</tbody>
+</table></div>
+</main>
+<script>window.location.hash&&document.getElementById(window.location.hash.slice(1)).classList.add("referred"),window.addEventListener("hashchange",(e=>{const t=e.oldURL.split("#");t[1]&&document.getElementById(t[1]).classList.remove("referred");const n=e.newURL.split("#");n[1]&&document.getElementById(n[1]).classList.add("referred")}),!1);const url_parts=window.location.href.split("#"),url=url_parts[0],referrence=url_parts[1];document.querySelectorAll(".cm-s-obsidian > *[id]").forEach((function(e){e.ondblclick=function(e){const t=url+"#"+e.target.id;navigator.clipboard.writeText(t)}}))</script>
+<script src="https://fastly.jsdelivr.net/npm/luxon@3.2.1/build/global/luxon.min.js"></script>
+<script defer="defer">TIMESTAMP_FORMAT="MMM dd, yyyy h:mm a",document.querySelectorAll(".human-date").forEach((function(e){date=e.getAttribute("data-date")||e.innerText,parsed_date=luxon.DateTime.fromISO(date),null!=parsed_date.invalid&&(parsed_date=luxon.DateTime.fromSQL(date)),null!=parsed_date.invalid&&(parsed_date=luxon.DateTime.fromHTML(date)),e.innerHTML=parsed_date.toFormat(TIMESTAMP_FORMAT)}))</script>
+<script>lucide.createIcons({attrs:{class:["svg-icon"]}})</script>
+</body>
+</html>
