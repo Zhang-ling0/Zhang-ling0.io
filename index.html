@@ -232,10 +232,11 @@
       let text = await res.text();
 
       // 处理 Obsidian 图片语法 ![[xxx.png]] -> 标准 HTML 图片
-      // 假设图片放在笔记同级目录
-      const dir = filePath.substring(0, filePath.lastIndexOf('/'));
+      // 因为你的图片在 notes/MySQL/MySQL/ 这个同名文件夹下，所以路径需要加上这层嵌套
+      const dir = filePath.substring(0, filePath.lastIndexOf('/')); // 获取 notes/MySQL
       text = text.replace(/!\[\[(.*?)\]\]/g, (match, imgName) => {
-        const imgUrl = `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${dir}/${encodeURIComponent(imgName)}`;
+        // 拼接真实的 raw 图片地址，注意这里多加了一层同名文件夹
+        const imgUrl = `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${dir}/${dir.split('/').pop()}/${encodeURIComponent(imgName)}`;
         return `![${imgName}](${imgUrl})`;
       });
 
