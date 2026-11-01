@@ -1,327 +1,281 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zhang-ling0 | 技术知识库</title>
-    <!-- 引入 Markdown 解析库 -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- 引入代码高亮库 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Miss Zhang — Developer Dashboard</title>
+  <!-- 引入 marked.js 用于渲染 Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- 代码高亮 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  
+  <style>
+    /* 保留你原来的所有 CSS 样式，一点没动 */
+    :root {
+      --bg: #050b18; --panel: rgba(10, 22, 46, .82); --line: rgba(72, 143, 255, .25);
+      --text: #eaf2ff; --muted: #8fa9cf; --cyan: #4deaff; --purple: #a78bfa; --green: #34d399;
+      --radius: 20px; --shadow: 0 18px 55px rgba(0,0,0,.22);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+    body {
+      margin: 0; color: var(--text); background: radial-gradient(ellipse at 80% 0%, rgba(77, 50, 170, .19), transparent 34rem), radial-gradient(ellipse at 20% 22%, rgba(0, 155, 255, .10), transparent 30rem), var(--bg);
+      font-family: Inter, system-ui, sans-serif; line-height: 1.55;
+    }
+    a { color: inherit; text-decoration: none; }
+    .layout { min-height: 100vh; display: flex; }
     
-    <style>
-        /* 浅色科技风变量 */
-        :root {
-            --bg-color: #f5f5f7;         /* 苹果高级浅灰背景 */
-            --surface-color: #ffffff;    /* 纯白卡片 */
-            --text-primary: #1d1d1f;     /* 极深灰文字 */
-            --text-secondary: #86868b;   /* 辅助浅灰 */
-            --border-color: #d2d2d7;     /* 极细边框 */
-            --accent: #0071e3;           /* 极客科技蓝 */
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
-            --shadow-lg: 0 12px 32px rgba(0,0,0,0.08);
-        }
+    .sidebar {
+      position: fixed; inset: 0 auto 0 0; width: 150px; padding: 30px 12px;
+      background: rgba(3, 10, 24, .96); border-right: 1px solid rgba(71, 126, 209, .2);
+      backdrop-filter: blur(18px); z-index: 5; display: flex; flex-direction: column;
+    }
+    .brand { padding: 5px 12px 35px; cursor: pointer; }
+    .brand-mark { font-size: 34px; font-weight: 900; letter-spacing: -2px; line-height: 1;
+      background: linear-gradient(120deg, var(--cyan), #6595ff 55%, var(--purple)); color: transparent; background-clip: text; }
+    .brand-name { margin-top: 10px; font-size: 13px; color: var(--muted); letter-spacing: .04em; }
+    
+    .nav { display: grid; gap: 7px; }
+    .nav a { display: flex; gap: 12px; align-items: center; padding: 11px 13px; border: 1px solid transparent; border-radius: 12px; color: #9eb3d7; font-size: 13px; transition: .2s ease; }
+    .nav a:hover, .nav a.active { color: var(--cyan); border-color: rgba(55, 145, 255, .24); background: linear-gradient(100deg, rgba(13, 105, 205, .28), rgba(23, 41, 81, .3)); transform: translateX(2px); }
+    
+    .nav-icon { width: 18px; text-align: center; font-size: 15px; }
+    .sidebar-bottom { margin-top: auto; padding: 18px 12px 0; color: #4f6c99; font-size: 12px; line-height: 1.8; }
+    
+    main { margin-left: 150px; padding: 24px 20px 28px; width: 100%; max-width: none; }
+    
+    /* 让区块之间有足够的间距，便于滚动定位 */
+    .dashboard-section { margin-bottom: 60px; min-height: 40vh; }
 
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-        }
+    .hero { min-height: 220px; position: relative; overflow: hidden; border: 1px solid rgba(78, 146, 255, .35); border-radius: 15px; background: #07152d; box-shadow: var(--shadow); display: flex; align-items: center; padding: 30px 56px; }
+    .hero::before { content:""; position:absolute; inset:0; background: linear-gradient(90deg, rgba(3,10,25,.94), rgba(4,13,33,.68) 43%, rgba(8,10,35,.08)); z-index:0; }
+    .hero-content { position:relative; z-index:1; max-width: 760px; }
+    .hero-greeting { color: #eaf2ff; font-size: 20px; margin-bottom: -3px; }
+    h1 { margin: 0 0 9px; font-size: clamp(42px, 4.5vw, 62px); line-height: 1.02; letter-spacing: -.055em; }
+    .gradient-text { background: linear-gradient(100deg, #fff, var(--cyan) 48%, #a78bfa); color: transparent; background-clip: text; }
+    .hero-sub { color: #b8c9e5; font-size: 14px; }
+    .hero-sub span { color: var(--cyan); }
+    .pills { display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+    .pill { padding: 7px 12px; border:1px solid rgba(77,234,255,.3); border-radius:99px; color:#cdeeff; background:rgba(5,23,50,.72); font-size:12px; }
+    .pill.purple { border-color:rgba(167,139,250,.45); color:#ddd3ff; }
+    
+    .section { margin-top: 24px; }
+    .grid { display:grid; gap:16px; }
+    .two-col { grid-template-columns: 1fr 1fr; }
+    .analytics-grid { grid-template-columns: minmax(0, 1.8fr) minmax(250px, .8fr); }
+    .panel { min-width:0; border:1px solid var(--line); border-radius:14px; padding:20px; background: linear-gradient(145deg, rgba(12,26,53,.92), rgba(5,14,32,.91)); box-shadow:var(--shadow); position:relative; overflow:hidden; }
+    .panel-heading { display:flex; align-items:center; gap:11px; margin:0 0 16px; font-size:16px; font-weight:750; }
+    .heading-icon { display:grid; place-items:center; width:31px; height:31px; border-radius:10px; color:var(--cyan); background:rgba(16,122,219,.16); border:1px solid rgba(77,234,255,.2); }
+    .muted { color:var(--muted); }
 
-        /* 绘制一个极其微弱的科技网格背景 */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            background-image: 
-                linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px);
-            background-size: 40px 40px; /* 网格大小 */
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 80px 24px;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
-        
-        .wrapper { 
-            max-width: 960px; 
-            width: 100%; 
-        }
-        
-        /* 头部排版 */
-        .header { 
-            margin-bottom: 64px; 
-            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+    /* 笔记列表样式 */
+    .note-list { display: grid; gap: 10px; margin-top: 15px; }
+    .note-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(8,22,47,.6); border: 1px solid rgba(79,137,231,.2); border-radius: 10px; transition: 0.2s; cursor: pointer; }
+    .note-item:hover { border-color: var(--cyan); background: rgba(16,122,219,.15); transform: translateX(4px); }
+    .note-name { font-size: 14px; color: #d7e5ff; }
+    .note-date { font-size: 12px; color: var(--muted); }
 
-        .header h1 { 
-            font-size: 3rem; 
-            font-weight: 700; 
-            letter-spacing: -0.05em; 
-            margin-bottom: 16px; 
-            color: var(--text-primary);
-        }
+    /* Markdown 阅读器全屏遮罩 */
+    #reader-view { display: none; position: fixed; inset: 0; background: rgba(3, 10, 24, 0.95); backdrop-filter: blur(10px); z-index: 100; overflow-y: auto; padding: 40px 20px; }
+    .reader-content { max-width: 900px; margin: 0 auto; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 40px; box-shadow: var(--shadow); position: relative; }
+    .close-btn { position: absolute; top: 20px; right: 20px; color: var(--cyan); font-size: 24px; cursor: pointer; font-weight: bold; }
+    .close-btn:hover { color: #fff; }
+    
+    /* Markdown 渲染样式 */
+    #markdown-body { line-height: 1.8; color: #d1d5db; font-size: 16px; }
+    #markdown-body h1, #markdown-body h2, #markdown-body h3 { color: #fff; margin-top: 1.5em; margin-bottom: 0.8em; border-bottom: 1px solid var(--line); padding-bottom: 0.3em; }
+    #markdown-body code { background: rgba(255,255,255,0.1); padding: 0.2em 0.4em; border-radius: 4px; font-family: monospace; }
+    #markdown-body pre { background: #161b22; padding: 15px; border-radius: 8px; overflow-x: auto; margin-bottom: 1.2em; }
+    #markdown-body pre code { background: transparent; padding: 0; color: #e5e7eb; }
+    #markdown-body blockquote { border-left: 4px solid var(--cyan); padding-left: 15px; color: var(--muted); margin-bottom: 1.2em; background: rgba(77, 234, 255, 0.05); }
+    #markdown-body img { max-width: 100%; border-radius: 8px; margin: 1em 0; }
 
-        .header h1 span { 
-            color: var(--text-secondary);
-            font-weight: 400;
-        }
+    footer { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 6px 5px; color:#607da9; font-size:11px; border-top: 1px solid var(--line); margin-top: 40px; }
+    footer a { color:#85b6e8; }
 
-        .header p { 
-            color: var(--text-secondary); 
-            font-size: 1.15rem; 
-            max-width: 600px; 
-            margin-bottom: 24px; 
-            font-weight: 400;
-            letter-spacing: -0.01em;
-        }
-
-        .tag { 
-            display: inline-block; 
-            background: var(--surface-color);
-            color: var(--text-primary); 
-            border: 1px solid var(--border-color); 
-            padding: 6px 14px; 
-            border-radius: 20px; 
-            font-size: 0.85rem; 
-            font-weight: 500;
-            box-shadow: var(--shadow-sm);
-        }
-        
-        /* 卡片网格 */
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 24px; 
-            margin-bottom: 64px; 
-            animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
-        }
-
-        /* 纯白科技感卡片 */
-        .card { 
-            background: var(--surface-color); 
-            border: 1px solid var(--border-color); 
-            border-radius: 16px; 
-            padding: 32px; 
-            text-decoration: none; 
-            color: var(--text-primary); 
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
-            display: flex; 
-            flex-direction: column; 
-            cursor: pointer; 
-            box-shadow: var(--shadow-sm);
-        }
-
-        .card:hover { 
-            transform: translateY(-4px) scale(1.01); /* 微弹悬浮 */
-            border-color: var(--accent);
-            box-shadow: var(--shadow-lg);
-        }
-
-        /* 卡片左上角方块标识 */
-        .card-icon { 
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.95rem;
-            font-weight: 600;
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            margin-bottom: 24px; 
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 10px; 
-            color: var(--text-secondary);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover .card-icon {
-            background: var(--accent);
-            color: #ffffff;
-            border-color: var(--accent);
-        }
-
-        .card h3 { 
-            font-size: 1.25rem; 
-            margin-bottom: 12px; 
-            font-weight: 600; 
-            letter-spacing: -0.02em;
-        }
-
-        .card p { 
-            color: var(--text-secondary); 
-            font-size: 0.95rem; 
-            flex-grow: 1; 
-            line-height: 1.5;
-        }
-
-        /* 禁用状态 */
-        .card.disabled { 
-            background: rgba(255, 255, 255, 0.5);
-            border-color: transparent;
-            box-shadow: none;
-            cursor: default; 
-            opacity: 0.6;
-        }
-
-        .card.disabled:hover { 
-            transform: none; 
-            border-color: transparent; 
-            box-shadow: none; 
-        }
-        
-        .footer { 
-            text-align: center; 
-            color: var(--text-secondary); 
-            font-size: 0.85rem; 
-            padding-top: 24px; 
-            border-top: 1px solid var(--border-color); 
-        }
-
-        /* 阅读器界面 */
-        #reader-view {
-            display: none; 
-            width: 100%;
-            max-width: 800px;
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 48px;
-            margin: 0 auto;
-            animation: fadeIn 0.4s ease-out;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            margin-bottom: 32px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: 0.2s;
-        }
-
-        .back-btn:hover { 
-            color: var(--accent);
-        }
-        
-        /* Markdown 浅色排版 */
-        #markdown-content { line-height: 1.7; color: var(--text-primary); font-size: 1.05rem; }
-        #markdown-content h1, #markdown-content h2, #markdown-content h3 { color: #000; margin-top: 1.8em; margin-bottom: 0.6em; font-weight: 600; letter-spacing: -0.02em; }
-        #markdown-content h1 { font-size: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.3em; }
-        #markdown-content h2 { font-size: 1.5rem; }
-        #markdown-content p { margin-bottom: 1.2em; }
-        #markdown-content ul, #markdown-content ol { margin-bottom: 1.2em; padding-left: 1.5em; }
-        #markdown-content li { margin-bottom: 0.5em; }
-        #markdown-content code { background: #f5f5f7; padding: 0.2em 0.4em; border-radius: 4px; font-family: ui-monospace, monospace; font-size: 0.9em; color: #e01e5a; }
-        #markdown-content pre { background: #fafafa; padding: 20px; border-radius: 12px; overflow-x: auto; margin-bottom: 1.5em; border: 1px solid var(--border-color); }
-        #markdown-content pre code { background: transparent; padding: 0; color: #333; border: none; }
-        #markdown-content blockquote { border-left: 4px solid var(--accent); padding-left: 16px; color: var(--text-secondary); margin-bottom: 1.5em; background: #f5f5f7; padding: 12px 16px; border-radius: 0 8px 8px 0; }
-
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(15px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-
-        @media (max-width: 600px) {
-            body { padding: 40px 16px; }
-            .header h1 { font-size: 2.2rem; }
-            .card { padding: 24px; }
-            #reader-view { padding: 24px; }
-        }
-    </style>
+    @media (max-width: 1100px) { .sidebar { width:78px; padding:24px 10px; align-items:center; } .brand { padding:5px 0 28px; text-align:center; } .brand-mark { font-size:27px; } .brand-name, .nav-label, .sidebar-bottom { display:none; } .nav a { justify-content:center; width:48px; height:45px; padding:0; } main { margin-left:78px; padding: 18px; } .two-col, .analytics-grid { grid-template-columns:1fr; } }
+    @media (max-width: 760px) { .sidebar { position:sticky; top:0; width:100%; height:62px; padding:7px 12px; flex-direction:row; justify-content:space-between; border-right:0; border-bottom:1px solid var(--line); } .brand { padding:0; display:flex; align-items:center; gap:9px; } .brand-mark { font-size:24px; } .brand-name { display:block; margin:0; font-size:12px; } .nav { display:flex; gap:4px; } .nav a { width:39px; height:40px; } main { margin-left:0; padding:14px 12px 24px; } .hero { min-height:240px; padding:24px 20px; } .project-grid { grid-template-columns:1fr; } .reader-content { padding: 20px; } }
+  </style>
 </head>
 <body>
+<div class="layout">
+  <aside class="sidebar">
+    <a class="brand" href="#home">
+      <div class="brand-mark">ZH</div><div class="brand-name">Zhang-ling0</div>
+    </a>
+    <nav class="nav">
+      <a class="active" href="#home"><span class="nav-icon">⌂</span><span class="nav-label">Home</span></a>
+      <a href="#notes"><span class="nav-icon">📚</span><span class="nav-label">Notes</span></a>
+      <a href="#about"><span class="nav-icon">◉</span><span class="nav-label">About</span></a>
+    </nav>
+    <div class="sidebar-bottom">Build<br>Learn<br>Grow</div>
+  </aside>
 
-    <div class="wrapper" id="home-view">
-        <div class="header">
-            <h1>Zhang-ling0 <span>的技术空间</span></h1>
-            <p>专注 C++ 后端开发、AI 大模型应用与 Linux 系统编程。</p>
-            <div class="tag">持续构建中</div>
+  <main>
+    <!-- 1. 首页 -->
+    <header class="hero dashboard-section" id="home">
+      <div class="hero-content">
+        <div class="hero-greeting">Hi, I’m</div>
+        <h1>Miss <span class="gradient-text">Zhang</span></h1>
+        <div class="hero-sub"><span>C++ Developer in Progress</span> &nbsp;|&nbsp; Linux &amp; Network Programming &nbsp;|&nbsp; Exploring AI Systems</div>
+        <div class="pills"><span class="pill"><span class="status-dot"></span>Focus: Systems &amp; AI</span><span class="pill purple">Status: Learning &amp; Building</span></div>
+      </div>
+    </header>
+
+    <!-- 2. 自动生成的笔记库 -->
+    <section class="dashboard-section" id="notes">
+      <div class="panel">
+        <h2 class="panel-heading"><span class="heading-icon">📚</span>My Knowledge Base</h2>
+        <p class="muted" style="font-size: 13px;">以下内容由网页自动读取 GitHub 仓库 `notes/MySQL/` 目录生成。</p>
+        <!-- 这里是放笔记列表的容器 -->
+        <div id="notes-container" class="note-list">
+          <p class="muted">正在加载笔记列表...</p>
         </div>
+      </div>
+    </section>
 
-        <div class="grid">
-            <!-- 你的原始代码，绝对没动 -->
-            <div class="card" onclick="loadMarkdown('notes/2026-10-10 数据库基础/index.html')">
-                <div class="card-icon">DB</div>
-                <h3>MySQL 数据库基础</h3>
-                <p>包含数据库的基本概念、编码设置与基础操作指南，夯实底层基础。</p>
-            </div>
+    <!-- 3. 关于我 -->
+    <section class="dashboard-section" id="about">
+      <div class="grid two-col">
+        <article class="panel">
+          <h2 class="panel-heading"><span class="heading-icon">◎</span>About Me</h2>
+          <div class="about-copy">
+            <p>I'm a student exploring software development.</p>
+            <p>Currently learning C, C++, Linux and network programming.</p>
+          </div>
+        </article>
+        <article class="panel">
+          <h2 class="panel-heading"><span class="heading-icon">◎</span>Current Focus</h2>
+          <div class="about-copy">
+            <p>AI Systems Engineering / C++ Backend</p>
+          </div>
+        </article>
+      </div>
+    </section>
 
-            <div class="card disabled">
-                <div class="card-icon">C++</div>
-                <h3>C++ 后端开发</h3>
-                <p>（内容筹备中）Linux 系统编程、网络编程与高并发服务器设计。</p>
-            </div>
+    <footer>
+      <div>© <span id="year"></span> Zhang-ling0. Built with curiosity.</div>
+      <div class="footer-links"><a href="https://github.com/Zhang-ling0" target="_blank">GitHub</a></div>
+    </footer>
+  </main>
+</div>
 
-            <div class="card disabled">
-                <div class="card-icon">AI</div>
-                <h3>AI 与大模型实践</h3>
-                <p>（内容筹备中）LangChain 应用开发与本地大模型部署踩坑记录。</p>
-            </div>
-        </div>
+<!-- 全屏阅读器遮罩层 -->
+<div id="reader-view">
+  <div class="reader-content">
+    <span class="close-btn" onclick="closeReader()">×</span>
+    <div id="markdown-body">加载中...</div>
+  </div>
+</div>
 
-        <div class="footer">
-            © 2026 Zhang-ling0. Built with Codex.
-        </div>
-    </div>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
 
-    <!-- 阅读器视图（默认隐藏，点击卡片后显示） -->
-    <div class="wrapper" id="reader-view">
-        <a class="back-btn" onclick="showHome()">← 返回主页</a>
-        <div id="markdown-content">
-            正在加载笔记内容...
-        </div>
-    </div>
+  // 🔥 核心黑科技：调用 GitHub API 自动获取 notes/MySQL 目录下的所有文件
+  const username = "Zhang-ling0";
+  const repo = "Zhang-ling0.io";
+  const branch = "gh-pages"; 
+  const folderPath = "notes/MySQL"; // 你要展示的文件夹路径
 
-    <script>
-        // 加载并渲染 Markdown
-        async function loadMarkdown(url) {
-            try {
-                // 隐藏主页，显示阅读器
-                document.getElementById('home-view').style.display = 'none';
-                document.getElementById('reader-view').style.display = 'block';
-                document.getElementById('markdown-content').innerHTML = '加载中...';
-                
-                // 请求 md 文件内容
-                const response = await fetch(url);
-                if (!response.ok) throw new Error('网络错误，找不到文件');
-                const text = await response.text();
-                
-                // 🔥 修复 Obsidian 的图片语法，自动转成 HTML
-                const cleanText = text.replace(/!\[\[(.*?)\]\]/g, '![$1](./notes/$1)');
-                
-                // 使用 marked.js 转换并渲染
-                const html = marked.parse(cleanText);
-                document.getElementById('markdown-content').innerHTML = html;
-                
-                // 触发代码高亮
-                document.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightElement(block);
-                });
+  async function fetchNotes() {
+    const container = document.getElementById("notes-container");
+    try {
+      // 调用 GitHub API
+      const response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${folderPath}?ref=${branch}`);
+      if (!response.ok) throw new Error("API 请求失败");
+      
+      const files = await response.json();
+      
+      // 过滤出所有 .md 文件
+      const mdFiles = files.filter(file => file.name.endsWith(".md"));
+      
+      // 如果文件夹是空的
+      if (mdFiles.length === 0) {
+        container.innerHTML = '<p class="muted">这里暂时没有笔记。</p>';
+        return;
+      }
 
-                // 滚动到顶部
-                window.scrollTo(0, 0);
-            } catch (error) {
-                document.getElementById('markdown-content').innerHTML = 
-                    `<h2 style="color:red;">加载失败</h2><p>请检查文件路径是否正确。错误信息：${error.message}</p>`;
-            }
-        }
+      // 自动生成 HTML 列表
+      container.innerHTML = ""; // 清空加载提示
+      mdFiles.forEach(file => {
+        // 将文件名里的空格转义，方便 URL 使用
+        const safeUrl = file.path.split('/').map(p => encodeURIComponent(p)).join('/');
+        
+        const item = document.createElement("div");
+        item.className = "note-item";
+        item.onclick = () => openNote(file.path);
+        item.innerHTML = `
+          <div class="note-name"> ${file.name.replace('.md', '')}</div>
+          <div class="note-date">Read →</div>
+        `;
+        container.appendChild(item);
+      });
+    } catch (error) {
+      container.innerHTML = `<p class="muted" style="color:#f87171">无法加载笔记，请检查仓库权限或路径。错误：${error.message}</p>`;
+    }
+  }
 
-        // 返回主页
-        function showHome() {
-            document.getElementById('reader-view').style.display = 'none';
-            document.getElementById('home-view').style.display = 'block';
-            window.scrollTo(0, 0);
-        }
-    </script>
+  // 点击笔记打开阅读器
+  async function openNote(filePath) {
+    const reader = document.getElementById("reader-view");
+    const body = document.getElementById("markdown-body");
+    reader.style.display = "block";
+    body.innerHTML = "正在拉取内容...";
+    
+    // 计算真实的 Raw 文件地址
+    const rawUrl = `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${filePath}`;
+    
+    try {
+      const res = await fetch(rawUrl);
+      if (!res.ok) throw new Error("拉取文件失败");
+      let text = await res.text();
+
+      // 处理 Obsidian 图片语法 ![[xxx.png]] -> 标准 HTML 图片
+      // 假设图片放在笔记同级目录
+      const dir = filePath.substring(0, filePath.lastIndexOf('/'));
+      text = text.replace(/!\[\[(.*?)\]\]/g, (match, imgName) => {
+        const imgUrl = `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${dir}/${encodeURIComponent(imgName)}`;
+        return `![${imgName}](${imgUrl})`;
+      });
+
+      // 渲染 Markdown
+      body.innerHTML = marked.parse(text);
+      
+      // 代码高亮
+      document.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightElement(block);
+      });
+      
+      // 滚动到顶部
+      reader.scrollTop = 0;
+    } catch (err) {
+      body.innerHTML = `<p style="color:red">加载失败：${err.message}</p>`;
+    }
+  }
+
+  function closeReader() {
+    document.getElementById("reader-view").style.display = "none";
+  }
+
+  // 页面滚动高亮导航栏逻辑
+  const sections = document.querySelectorAll("header, section");
+  const navLinks = document.querySelectorAll(".nav a");
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute("id");
+        navLinks.forEach(link => {
+          link.classList.remove("active");
+          if (link.getAttribute("href") === `#${id}`) link.classList.add("active");
+        });
+      }
+    });
+  }, { rootMargin: "-20% 0px -50% 0px" });
+  sections.forEach(section => observer.observe(section));
+
+  // 页面加载时执行拉取
+  fetchNotes();
+</script>
 </body>
 </html>
