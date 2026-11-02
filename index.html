@@ -3,149 +3,232 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Miss Zhang | Developer Space</title>
-  
+  <meta name="theme-color" content="#050811">
+  <meta name="description" content="Miss Zhang 的个人技术知识库，记录 C++、Linux、网络编程与 AI 学习笔记。">
+  <title>Knowledge Base | Miss Zhang</title>
   <style>
     :root {
-      --bg: #050811;
-      --panel: rgba(14, 20, 36, 0.7);
-      --line: rgba(72, 143, 255, 0.15);
-      --text: #eaf2ff; 
-      --muted: #7b90b5; 
-      --cyan: #00f0ff; 
-      --purple: #8a2be2;
+      color-scheme: dark;
+      --bg:#050811; --panel:rgba(14,20,36,.76); --panel-2:rgba(10,16,31,.88);
+      --line:rgba(93,151,255,.18); --line-strong:rgba(0,240,255,.38);
+      --text:#eaf2ff; --muted:#8295b8; --cyan:#00e5f5; --blue:#6595ff;
+      --purple:#9b6bff; --danger:#ff737d; --success:#62e6bd;
+      --shadow:0 24px 70px rgba(0,0,0,.28);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      background-color: var(--bg);
-      /* 科技感背景网格 */
-      background-image: 
-        linear-gradient(rgba(72, 143, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(72, 143, 255, 0.05) 1px, transparent 1px);
-      background-size: 40px 40px;
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 80px 20px;
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      min-height:100vh;color:var(--text);
+      background-color:var(--bg);
+      background-image:
+        radial-gradient(ellipse at 15% 0%,rgba(35,87,170,.19),transparent 38%),
+        radial-gradient(ellipse at 90% 15%,rgba(107,52,173,.13),transparent 32%),
+        linear-gradient(rgba(72,143,255,.045) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(72,143,255,.045) 1px,transparent 1px);
+      background-size:auto,auto,42px 42px,42px 42px;
+      font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+      padding:34px 22px 50px;
     }
-
-    .wrapper { max-width: 1100px; width: 100%; }
-
-    /* 顶部简介 */
-    .hero { margin-bottom: 80px; text-align: center; }
-    .hero-title { font-size: 4rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 10px; }
-    .hero-title span { background: linear-gradient(90deg, var(--cyan), #6595ff, var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero-sub { color: var(--muted); font-size: 1.2rem; letter-spacing: 1px; }
-
-    /* 分类网格 */
-    .section-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
-    .section-title::before { content: ""; display: block; width: 4px; height: 20px; background: var(--cyan); border-radius: 2px; }
-
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
-
-    /* 纯 CSS 几何文件夹卡片 */
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 30px;
-      text-decoration: none;
-      color: var(--text);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .card::before {
-      content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-      opacity: 0; transition: opacity 0.3s;
-    }
-
-    .card:hover {
-      transform: translateY(-5px) scale(1.02);
-      border-color: rgba(0, 240, 255, 0.4);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 240, 255, 0.1);
-    }
-    .card:hover::before { opacity: 1; }
-
-    /* 高逼格几何图标 (不用 Emoji) */
-    .icon-box {
-      width: 48px; height: 48px; border: 1px solid var(--line); border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 20px; position: relative; background: rgba(0,0,0,0.3);
-    }
-    .icon-box::after {
-      content: ""; width: 16px; height: 16px; border: 2px solid var(--cyan); border-radius: 4px;
-      transition: all 0.3s;
-    }
-    .card:hover .icon-box::after { background: var(--cyan); transform: rotate(45deg); }
-
-    .card-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.5px; }
-    .card-desc { color: var(--muted); font-size: 0.95rem; flex-grow: 1; }
-    .card-arrow { margin-top: 20px; color: var(--cyan); font-size: 0.9rem; font-weight: 600; letter-spacing: 1px; }
+    a{color:inherit}
+    .shell{width:min(1120px,100%);margin:0 auto}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:58px}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+    .brand-mark{width:38px;height:38px;border:1px solid rgba(0,229,245,.48);border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(0,229,245,.12),rgba(155,107,255,.12));box-shadow:0 0 24px rgba(0,229,245,.08)}
+    .brand-mark span{width:13px;height:13px;border:2px solid var(--cyan);transform:rotate(45deg);display:block}
+    .brand-name{font-size:13px;font-weight:750;letter-spacing:1.8px}
+    .brand-caption{font-size:10px;color:var(--muted);letter-spacing:1.5px;margin-top:3px}
+    .top-link{font-size:11px;letter-spacing:1.2px;text-decoration:none;color:#a8bad8;border:1px solid var(--line);padding:10px 14px;border-radius:9px;transition:.25s;background:rgba(12,20,38,.55)}
+    .top-link:hover{color:var(--cyan);border-color:var(--line-strong);transform:translateY(-2px)}
+    .hero{position:relative;overflow:hidden;padding:46px 48px 40px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(120deg,rgba(15,27,50,.92),rgba(12,17,34,.82));box-shadow:var(--shadow);margin-bottom:24px}
+    .hero:after{content:"";position:absolute;width:330px;height:330px;right:-100px;top:-180px;border:1px solid rgba(0,229,245,.17);border-radius:50%;box-shadow:0 0 0 28px rgba(0,229,245,.025),0 0 0 58px rgba(0,229,245,.018);pointer-events:none}
+    .eyebrow{font-size:10px;letter-spacing:3px;color:var(--cyan);font-weight:700;margin-bottom:17px}
+    .hero h1{font-size:clamp(38px,6vw,66px);line-height:1.05;letter-spacing:-2.5px;font-weight:820;margin-bottom:15px}
+    .hero h1 span{background:linear-gradient(90deg,var(--cyan),var(--blue),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero-sub{font-size:14px;line-height:1.8;color:#9aaccb;max-width:760px}
+    .hero-tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:25px}
+    .hero-tags span{font-size:10px;letter-spacing:.7px;color:#b8c9e7;border:1px solid rgba(113,151,218,.2);background:rgba(7,14,28,.46);padding:7px 11px;border-radius:6px}
+    .overview{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:55px}
+    .metric{padding:18px 20px;border:1px solid var(--line);border-radius:14px;background:var(--panel);backdrop-filter:blur(12px)}
+    .metric-label{font-size:10px;color:var(--muted);letter-spacing:1.4px;text-transform:uppercase}
+    .metric-value{font-size:25px;font-weight:750;margin-top:8px;letter-spacing:-.5px}
+    .metric-note{font-size:10px;color:#657b9f;margin-top:4px}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:19px}
+    .section-kicker{font-size:9px;letter-spacing:2.4px;color:var(--cyan);margin-bottom:8px}
+    .section-title{font-size:23px;letter-spacing:-.5px;font-weight:700}
+    .section-desc{font-size:11px;color:var(--muted);margin-top:7px}
+    .search-wrap{position:relative;width:min(300px,100%)}
+    .search-wrap:before{content:"";position:absolute;left:14px;top:50%;width:11px;height:11px;border:1.5px solid #7790b8;border-radius:50%;transform:translateY(-60%)}
+    .search-wrap:after{content:"";position:absolute;left:25px;top:22px;width:6px;height:1.5px;background:#7790b8;transform:rotate(45deg)}
+    .search{width:100%;height:42px;border:1px solid var(--line);border-radius:9px;background:rgba(10,17,32,.82);padding:0 14px 0 38px;color:var(--text);outline:none;font:inherit;font-size:12px;transition:.2s}
+    .search:focus{border-color:var(--line-strong);box-shadow:0 0 0 3px rgba(0,229,245,.06)}
+    .search::placeholder{color:#64799c}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .category-card{position:relative;display:flex;min-height:190px;flex-direction:column;text-decoration:none;padding:22px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,rgba(16,25,46,.88),rgba(10,16,31,.88));overflow:hidden;transition:transform .28s,border-color .28s,box-shadow .28s}
+    .category-card:before{content:"";position:absolute;left:0;top:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),var(--purple),transparent);opacity:0;transition:opacity .25s}
+    .category-card:hover{transform:translateY(-5px);border-color:var(--line-strong);box-shadow:0 18px 42px rgba(0,0,0,.28),0 0 24px rgba(0,229,245,.055)}
+    .category-card:hover:before{opacity:1}
+    .card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:23px}
+    .folder-icon{width:39px;height:34px;position:relative;border:1px solid rgba(0,229,245,.35);border-radius:7px;background:rgba(0,229,245,.055)}
+    .folder-icon:before{content:"";position:absolute;left:5px;top:-5px;width:15px;height:6px;border:1px solid rgba(0,229,245,.35);border-bottom:0;border-radius:4px 4px 0 0;background:#101b30}
+    .card-index{font:10px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;color:#62799e;letter-spacing:1px}
+    .card-title{font-size:17px;font-weight:700;letter-spacing:.1px;margin-bottom:8px;overflow-wrap:anywhere}
+    .card-desc{font-size:11px;line-height:1.7;color:var(--muted);flex:1}
+    .card-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:13px;border-top:1px solid rgba(93,151,255,.11)}
+    .card-type{font-size:9px;color:#7188ad;letter-spacing:1.2px}
+    .card-enter{font-size:10px;color:var(--cyan);font-weight:700;letter-spacing:1.1px}
+    .state{grid-column:1/-1;padding:28px;border:1px dashed var(--line);border-radius:13px;color:var(--muted);font-size:12px;text-align:center;background:rgba(10,16,30,.4)}
+    .state.error{color:var(--danger)}
+    .empty-mark{width:26px;height:26px;border:1px solid rgba(130,149,184,.45);border-radius:8px;margin:0 auto 12px;transform:rotate(45deg)}
+    .footer{display:flex;justify-content:space-between;gap:15px;margin-top:55px;padding-top:18px;border-top:1px solid rgba(93,151,255,.12);font-size:10px;color:#5f7395;letter-spacing:.5px}
+    .footer a{color:#8ba4ca;text-decoration:none}.footer a:hover{color:var(--cyan)}
+    @media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding:38px 32px}}
+    @media(max-width:600px){body{padding:20px 14px 34px}.topbar{margin-bottom:30px}.hero{padding:30px 22px;margin-bottom:15px}.hero h1{letter-spacing:-1.5px}.hero-sub{font-size:12px}.overview{gap:8px;margin-bottom:40px}.metric{padding:13px 11px}.metric-value{font-size:21px}.metric-label{font-size:8px;letter-spacing:.7px}.section-head{align-items:stretch;flex-direction:column}.search-wrap{width:100%}.grid{grid-template-columns:1fr;gap:12px}.category-card{min-height:165px}.footer{flex-direction:column}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
   </style>
 </head>
 <body>
-  <div class="wrapper">
+  <main class="shell">
+    <nav class="topbar" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="Knowledge Base home">
+        <span class="brand-mark"><span></span></span>
+        <span><span class="brand-name">ZHANG / KNOWLEDGE</span><span class="brand-caption">PERSONAL TECHNICAL ARCHIVE</span></span>
+      </a>
+      <a class="top-link" href="https://github.com/Zhang-ling0" target="_blank" rel="noopener noreferrer">DEVELOPER SPACE ↗</a>
+    </nav>
+
     <header class="hero">
-      <div class="hero-title">Miss <span>Zhang</span></div>
-      <div class="hero-sub">C++ Developer in Progress | Linux & Network Programming | Exploring AI</div>
+      <div class="eyebrow">PERSONAL KNOWLEDGE SYSTEM / 01</div>
+      <h1>Miss <span>Zhang</span></h1>
+      <p class="hero-sub">A personal archive of ideas, experiments and technical notes. Documenting the journey through C++, Linux, network programming and AI systems.</p>
+      <div class="hero-tags"><span>C++ DEVELOPMENT</span><span>LINUX SYSTEMS</span><span>NETWORK PROGRAMMING</span><span>AI EXPLORATION</span></div>
     </header>
 
-    <h2 class="section-title">Knowledge Base</h2>
-    <div id="category-container" class="grid">
-      <!-- 卡片由 JS 动态生成 -->
-    </div>
-  </div>
+    <section class="overview" aria-label="Knowledge base overview">
+      <div class="metric"><div class="metric-label">Knowledge Categories</div><div class="metric-value" id="category-count">--</div><div class="metric-note">Collections in this archive</div></div>
+      <div class="metric"><div class="metric-label">Repository</div><div class="metric-value">PUBLIC</div><div class="metric-note">Synced from GitHub Pages source</div></div>
+      <div class="metric"><div class="metric-label">Archive Status</div><div class="metric-value" id="archive-status">CONNECTING</div><div class="metric-note" id="status-note">Reading notes directory</div></div>
+    </section>
+
+    <section aria-labelledby="knowledge-heading">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">BROWSE THE ARCHIVE</div>
+          <h2 class="section-title" id="knowledge-heading">Knowledge Base</h2>
+          <p class="section-desc">Choose a collection to explore its notes and documents.</p>
+        </div>
+        <label class="search-wrap"><input class="search" id="category-search" type="search" placeholder="Search categories..." autocomplete="off" aria-label="Search categories"></label>
+      </div>
+      <div id="category-container" class="grid" aria-live="polite">
+        <div class="state">INITIALIZING KNOWLEDGE BASE...</div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>© <span id="year"></span> MISS ZHANG · BUILT FOR CONTINUOUS LEARNING</span>
+      <a href="https://github.com/Zhang-ling0" target="_blank" rel="noopener noreferrer">GITHUB PROFILE ↗</a>
+    </footer>
+  </main>
 
 <script>
   const username = "Zhang-ling0";
   const repo = "Zhang-ling0.io";
-  const branch = "gh-pages"; 
+  const branch = "gh-pages";
   const basePath = "notes";
+  const container = document.getElementById("category-container");
+  const searchInput = document.getElementById("category-search");
+  let categoryCards = [];
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  function showState(message, isError = false) {
+    container.innerHTML = "";
+    const state = document.createElement("div");
+    state.className = `state${isError ? " error" : ""}`;
+    state.textContent = message;
+    container.appendChild(state);
+  }
+
+  function renderCategories(query = "") {
+    const normalized = query.trim().toLocaleLowerCase();
+    const filtered = categoryCards.filter(folder => folder.name.toLocaleLowerCase().includes(normalized));
+    container.innerHTML = "";
+
+    if (!filtered.length) {
+      const state = document.createElement("div");
+      state.className = "state";
+      state.innerHTML = '<div class="empty-mark"></div><div>No matching collections found.</div>';
+      container.appendChild(state);
+      return;
+    }
+
+    filtered.forEach((folder, index) => {
+      const link = document.createElement("a");
+      link.className = "category-card";
+      link.href = `folder.html?path=${encodeURIComponent(folder.path)}`;
+
+      const top = document.createElement("div");
+      top.className = "card-top";
+      const icon = document.createElement("span");
+      icon.className = "folder-icon";
+      icon.setAttribute("aria-hidden", "true");
+      const number = document.createElement("span");
+      number.className = "card-index";
+      number.textContent = `COLLECTION / ${String(index + 1).padStart(2, "0")}`;
+      top.append(icon, number);
+
+      const title = document.createElement("div");
+      title.className = "card-title";
+      title.textContent = folder.name;
+
+      const desc = document.createElement("p");
+      desc.className = "card-desc";
+      desc.textContent = "Explore notes, reference materials and documents in this collection.";
+
+      const bottom = document.createElement("div");
+      bottom.className = "card-bottom";
+      const type = document.createElement("span");
+      type.className = "card-type";
+      type.textContent = "DIRECTORY";
+      const enter = document.createElement("span");
+      enter.className = "card-enter";
+      enter.textContent = "EXPLORE  →";
+      bottom.append(type, enter);
+
+      link.append(top, title, desc, bottom);
+      container.appendChild(link);
+    });
+  }
 
   async function fetchCategories() {
-    const container = document.getElementById("category-container");
     try {
-      const response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${basePath}?ref=${branch}`);
-      if (!response.ok) throw new Error("API Request Failed");
-      
-      const items = await response.json();
-      const folders = items.filter(item => item.type === 'dir');
-      
-      if (folders.length === 0) {
-        container.innerHTML = '<p style="color:var(--muted);">暂无分类。</p>';
-        return;
+      const endpoint = `https://api.github.com/repos/${username}/${repo}/contents/${basePath}?ref=${branch}`;
+      const response = await fetch(endpoint, { headers: { "Accept": "application/vnd.github+json" } });
+      if (!response.ok) {
+        if (response.status === 403 || response.status === 429) throw new Error("GitHub API rate limit reached. Please try again later.");
+        if (response.status === 404) throw new Error("The notes directory was not found. Check the repository branch and path.");
+        throw new Error(`GitHub API request failed (${response.status}).`);
       }
 
-      container.innerHTML = ""; 
-      folders.sort((a, b) => a.name.localeCompare(b.name));
+      const items = await response.json();
+      categoryCards = items.filter(item => item.type === "dir").sort((a, b) => a.name.localeCompare(b.name, "zh-CN"));
+      document.getElementById("category-count").textContent = String(categoryCards.length).padStart(2, "0");
+      document.getElementById("archive-status").textContent = "ONLINE";
+      document.getElementById("status-note").textContent = "Directory synced successfully";
 
-      folders.forEach(folder => {
-        const a = document.createElement("a");
-        a.href = `folder.html?path=${encodeURIComponent(folder.path)}`;
-        a.className = "card";
-        
-        a.innerHTML = `
-          <div class="icon-box"></div>
-          <div class="card-title">${folder.name}</div>
-          <div class="card-desc">Access all documents and files in this module.</div>
-          <div class="card-arrow">ENTER →</div>
-        `;
-        container.appendChild(a);
-      });
+      if (!categoryCards.length) {
+        showState("No category folders found in the notes directory.");
+        return;
+      }
+      renderCategories(searchInput.value);
     } catch (error) {
-      container.innerHTML = `<p style="color:#ff4d4f;">System Error: ${error.message}</p>`;
+      document.getElementById("category-count").textContent = "--";
+      document.getElementById("archive-status").textContent = "OFFLINE";
+      document.getElementById("status-note").textContent = "Unable to sync directory";
+      showState(error.message || "An unexpected error occurred.", true);
     }
   }
+
+  searchInput.addEventListener("input", event => renderCategories(event.target.value));
   fetchCategories();
 </script>
 </body>
