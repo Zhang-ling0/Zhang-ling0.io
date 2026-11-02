@@ -4,271 +4,103 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Miss Zhang — Developer Dashboard</title>
-  
   <style>
+    /* 保持你原来的 CSS，这里省略，直接用你现有的 style 即可 */
+    /* 只需要确保 .grid 的布局是网格 */
     :root {
       --bg: #050b18; --panel: rgba(10, 22, 46, .82); --line: rgba(72, 143, 255, .25);
-      --text: #eaf2ff; --muted: #8fa9cf; --cyan: #4deaff; --purple: #a78bfa; --green: #34d399;
-      --radius: 20px; --shadow: 0 18px 55px rgba(0,0,0,.22);
+      --text: #eaf2ff; --muted: #8fa9cf; --cyan: #4deaff; --purple: #a78bfa;
     }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 24px; }
-    body {
-      margin: 0; color: var(--text); background: radial-gradient(ellipse at 80% 0%, rgba(77, 50, 170, .19), transparent 34rem), radial-gradient(ellipse at 20% 22%, rgba(0, 155, 255, .10), transparent 30rem), var(--bg);
-      font-family: Inter, system-ui, sans-serif; line-height: 1.55;
-    }
-    a { color: inherit; text-decoration: none; }
+    body { margin: 0; color: var(--text); background: var(--bg); font-family: Inter, system-ui, sans-serif; }
     .layout { min-height: 100vh; display: flex; }
-    
-    /* 左侧导航 */
-    .sidebar {
-      position: fixed; inset: 0 auto 0 0; width: 150px; padding: 30px 12px;
-      background: rgba(3, 10, 24, .96); border-right: 1px solid rgba(71, 126, 209, .2);
-      backdrop-filter: blur(18px); z-index: 5; display: flex; flex-direction: column;
-    }
-    .brand { padding: 5px 12px 35px; cursor: pointer; }
-    .brand-mark { font-size: 34px; font-weight: 900; letter-spacing: -2px; line-height: 1;
-      background: linear-gradient(120deg, var(--cyan), #6595ff 55%, var(--purple)); color: transparent; background-clip: text; }
+    .sidebar { position: fixed; inset: 0 auto 0 0; width: 150px; padding: 30px 12px; background: rgba(3, 10, 24, .96); border-right: 1px solid rgba(71, 126, 209, .2); display: flex; flex-direction: column; }
+    .brand { padding: 5px 12px 35px; cursor: pointer; text-decoration: none; display: block;}
+    .brand-mark { font-size: 34px; font-weight: 900; letter-spacing: -2px; background: linear-gradient(120deg, var(--cyan), #6595ff 55%, var(--purple)); color: transparent; background-clip: text; }
     .brand-name { margin-top: 10px; font-size: 13px; color: var(--muted); letter-spacing: .04em; }
-    
     .nav { display: grid; gap: 7px; }
-    .nav a { display: flex; gap: 12px; align-items: center; padding: 11px 13px; border: 1px solid transparent; border-radius: 12px; color: #9eb3d7; font-size: 13px; transition: .2s ease; }
-    .nav a:hover, .nav a.active { color: var(--cyan); border-color: rgba(55, 145, 255, .24); background: linear-gradient(100deg, rgba(13, 105, 205, .28), rgba(23, 41, 81, .3)); transform: translateX(2px); }
+    .nav a { display: flex; gap: 12px; align-items: center; padding: 11px 13px; border: 1px solid transparent; border-radius: 12px; color: #9eb3d7; font-size: 13px; text-decoration: none; }
     
-    .nav-icon { width: 18px; text-align: center; font-size: 15px; }
-    .sidebar-bottom { margin-top: auto; padding: 18px 12px 0; color: #4f6c99; font-size: 12px; line-height: 1.8; }
-    
-    main { margin-left: 150px; padding: 24px 20px 28px; width: 100%; max-width: none; }
-    
-    .dashboard-section { margin-bottom: 60px; min-height: 40vh; }
-
-    /* 顶部横幅 */
-    .hero { min-height: 220px; position: relative; overflow: hidden; border: 1px solid rgba(78, 146, 255, .35); border-radius: 15px; background: #07152d; box-shadow: var(--shadow); display: flex; align-items: center; padding: 30px 56px; }
-    .hero::before { content:""; position:absolute; inset:0; background: linear-gradient(90deg, rgba(3,10,25,.94), rgba(4,13,33,.68) 43%, rgba(8,10,35,.08)); z-index:0; }
-    .hero-content { position:relative; z-index:1; max-width: 760px; }
-    .hero-greeting { color: #eaf2ff; font-size: 20px; margin-bottom: -3px; }
-    h1 { margin: 0 0 9px; font-size: clamp(42px, 4.5vw, 62px); line-height: 1.02; letter-spacing: -.055em; }
+    main { margin-left: 150px; padding: 40px; width: 100%; max-width: 1200px; }
+    .hero { min-height: 220px; border-radius: 15px; background: #07152d; padding: 30px 56px; margin-bottom: 40px; border: 1px solid rgba(78, 146, 255, .35); }
+    h1 { margin: 0 0 9px; font-size: 3rem; }
     .gradient-text { background: linear-gradient(100deg, #fff, var(--cyan) 48%, #a78bfa); color: transparent; background-clip: text; }
-    .hero-sub { color: #b8c9e5; font-size: 14px; }
-    .hero-sub span { color: var(--cyan); }
-    .pills { display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
-    .pill { padding: 7px 12px; border:1px solid rgba(77,234,255,.3); border-radius:99px; color:#cdeeff; background:rgba(5,23,50,.72); font-size:12px; }
-    .pill.purple { border-color:rgba(167,139,250,.45); color:#ddd3ff; }
     
-    /* 分类面板与网格 */
-    .grid { display:grid; gap:20px; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); }
-    .panel { min-width:0; border:1px solid var(--line); border-radius:14px; padding:20px; background: linear-gradient(145deg, rgba(12,26,53,.92), rgba(5,14,32,.91)); box-shadow:var(--shadow); position:relative; overflow:hidden; }
-    .panel-heading { display:flex; align-items:center; gap:11px; margin:0 0 16px; font-size:16px; font-weight:750; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px;}
-    .heading-icon { display:grid; place-items:center; width:31px; height:31px; border-radius:10px; color:var(--cyan); background:rgba(16,122,219,.16); border:1px solid rgba(77,234,255,.2); }
-    .muted { color:var(--muted); }
-
-    /* PDF 列表项 */
-    .note-list { display: grid; gap: 10px; }
-    .note-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(8,22,47,.6); border: 1px solid rgba(79,137,231,.2); border-radius: 10px; transition: 0.2s; cursor: pointer; }
-    .note-item:hover { border-color: var(--cyan); background: rgba(16,122,219,.15); transform: translateX(4px); }
-    .note-name { font-size: 13px; color: #d7e5ff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .note-date { font-size: 12px; color: var(--cyan); flex-shrink: 0; margin-left: 10px; }
-
-    footer { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 6px 5px; color:#607da9; font-size:11px; border-top: 1px solid var(--line); margin-top: 40px; }
-    footer a { color:#85b6e8; }
-
-    /* 响应式 */
-    @media (max-width: 1100px) { 
-      .sidebar { width:78px; padding:24px 10px; align-items:center; } 
-      .brand { padding:5px 0 28px; text-align:center; } 
-      .brand-mark { font-size:27px; } 
-      .brand-name, .nav-label, .sidebar-bottom { display:none; } 
-      .nav a { justify-content:center; width:48px; height:45px; padding:0; } 
-      main { margin-left:78px; padding: 18px; } 
-      .grid { grid-template-columns: 1fr; } 
-    }
-    @media (max-width: 760px) { 
-      .sidebar { position:sticky; top:0; width:100%; height:62px; padding:7px 12px; flex-direction:row; justify-content:space-between; border-right:0; border-bottom:1px solid var(--line); } 
-      .brand { padding:0; display:flex; align-items:center; gap:9px; } 
-      .brand-mark { font-size:24px; } 
-      .brand-name { display:block; margin:0; font-size:12px; } 
-      .nav { display:flex; gap:4px; } 
-      .nav a { width:39px; height:40px; } 
-      main { margin-left:0; padding:14px 12px 24px; } 
-      .hero { min-height:240px; padding:24px 20px; } 
-    }
+    /* 分类卡片大网格 */
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .category-card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 30px; text-decoration: none; color: inherit; transition: 0.3s; display: flex; flex-direction: column; }
+    .category-card:hover { transform: translateY(-5px); border-color: var(--cyan); box-shadow: 0 10px 30px rgba(77,234,255,0.1); }
+    .category-title { font-size: 20px; font-weight: bold; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+    .category-desc { color: var(--muted); font-size: 13px; }
   </style>
 </head>
 <body>
 <div class="layout">
-  <!-- 侧边栏 -->
   <aside class="sidebar">
-    <a class="brand" href="#home">
+    <a class="brand" href="index.html">
       <div class="brand-mark">ZH</div><div class="brand-name">Zhang-ling0</div>
     </a>
     <nav class="nav">
-      <a class="active" href="#home"><span class="nav-icon">⌂</span><span class="nav-label">Home</span></a>
-      <a href="#notes"><span class="nav-icon">📚</span><span class="nav-label">Notes</span></a>
-      <a href="#about"><span class="nav-icon">◉</span><span class="nav-label">About</span></a>
+      <a href="index.html"><span class="nav-icon">⌂</span><span class="nav-label">Home</span></a>
     </nav>
-    <div class="sidebar-bottom">Build<br>Learn<br>Grow</div>
   </aside>
 
   <main>
-    <!-- 顶部 -->
-    <header class="hero dashboard-section" id="home">
-      <div class="hero-content">
-        <div class="hero-greeting">Hi, I’m</div>
-        <h1>Miss <span class="gradient-text">Zhang</span></h1>
-        <div class="hero-sub"><span>C++ Developer in Progress</span> &nbsp;|&nbsp; Linux &amp; Network Programming &nbsp;|&nbsp; Exploring AI Systems</div>
-        <div class="pills"><span class="pill"><span class="status-dot"></span>Focus: Systems &amp; AI</span><span class="pill purple">Status: Learning &amp; Building</span></div>
-      </div>
+    <header class="hero">
+      <div class="hero-greeting">Hi, I’m</div>
+      <h1>Miss <span class="gradient-text">Zhang</span></h1>
+      <div style="color: #b8c9e5; font-size: 14px;">C++ Developer in Progress | Linux & Network Programming | Exploring AI Systems</div>
     </header>
 
-    <!-- 核心：PDF 知识库 -->
-    <section class="dashboard-section" id="notes">
-      <h2 style="font-size: 24px; margin-bottom: 20px; color: #fff;">My Knowledge Base (PDF)</h2>
-      <!-- 这里会自动生成分类和 PDF 列表 -->
-      <div id="pdf-container" class="grid">
-        <p class="muted">正在扫描文档库...</p>
-      </div>
-    </section>
-
-    <!-- 关于 -->
-    <section class="dashboard-section" id="about">
-      <div class="grid">
-        <article class="panel">
-          <h2 class="panel-heading"><span class="heading-icon">◎</span>About Me</h2>
-          <div class="about-copy" style="color: #d1d5db; font-size: 14px;">
-            <p>I'm a student exploring software development.</p>
-            <p>Currently learning C, C++, Linux and network programming.</p>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <footer>
-      <div>© <span id="year"></span> Zhang-ling0. Built with curiosity.</div>
-      <div class="footer-links"><a href="https://github.com/Zhang-ling0" target="_blank">GitHub</a></div>
-    </footer>
+    <h2 style="font-size: 24px; margin-bottom: 20px; color: #fff;">My Knowledge Base</h2>
+    <div id="category-container" class="category-grid">
+      <p style="color: var(--muted);">正在加载分类...</p>
+    </div>
   </main>
 </div>
 
 <script>
-  document.getElementById("year").textContent = new Date().getFullYear();
-
-  // GitHub 基础配置
   const username = "Zhang-ling0";
   const repo = "Zhang-ling0.io";
   const branch = "gh-pages"; 
-  const basePath = "notes"; 
+  const basePath = "notes";
 
-  // 递归获取某个文件夹下的所有 PDF 文件
-  async function fetchPdfsInFolder(path) {
-    let pdfFiles = [];
+  async function fetchCategories() {
+    const container = document.getElementById("category-container");
     try {
-      const response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}?ref=${branch}`);
-      if (!response.ok) return pdfFiles;
-      const items = await response.json();
-
-      for (const item of items) {
-        if (item.type === "file" && item.name.endsWith(".pdf")) {
-          pdfFiles.push(item);
-        } else if (item.type === "dir") {
-          // 如果里面还有子文件夹，继续深挖
-          const subFiles = await fetchPdfsInFolder(item.path);
-          pdfFiles = pdfFiles.concat(subFiles);
-        }
-      }
-    } catch (e) {
-      console.error("Error fetching", path, e);
-    }
-    return pdfFiles;
-  }
-
-  // 主加载逻辑
-  async function initLibrary() {
-    const container = document.getElementById("pdf-container");
-    
-    try {
-      // 1. 获取 notes 下的所有主分类文件夹 (C++, MySQL, LinuxNetworking 等)
       const response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${basePath}?ref=${branch}`);
-      if (!response.ok) throw new Error("API 请求失败，可能被限流了");
+      if (!response.ok) throw new Error("API 请求失败");
       
       const items = await response.json();
+      // 只获取文件夹
       const folders = items.filter(item => item.type === 'dir');
       
       if (folders.length === 0) {
-        container.innerHTML = '<p class="muted">这里暂时没有分类文件夹。</p>';
+        container.innerHTML = '<p class="muted">暂无分类。</p>';
         return;
       }
 
-      container.innerHTML = ""; // 清空加载提示
+      container.innerHTML = ""; 
 
-      // 2. 遍历每个分类，生成独立的面板
-      for (const folder of folders) {
-        const panel = document.createElement("article");
-        panel.className = "panel";
-        
-        // 面板标题
-        const heading = document.createElement("h2");
-        heading.className = "panel-heading";
-        heading.innerHTML = `<span class="heading-icon">📁</span>${folder.name}`;
-        panel.appendChild(heading);
-        
-        // 列表容器
-        const list = document.createElement("div");
-        list.className = "note-list";
-        list.innerHTML = '<p class="muted" style="font-size:12px;">正在读取 PDF...</p>';
-        panel.appendChild(list);
-        container.appendChild(panel);
+      folders.sort((a, b) => a.name.localeCompare(b.name));
 
-        // 3. 异步去获取这个文件夹下的所有 PDF
-        fetchPdfsInFolder(folder.path).then(pdfFiles => {
-          if (pdfFiles.length === 0) {
-            list.innerHTML = '<p class="muted" style="font-size:12px;">暂无 PDF 笔记</p>';
-            return;
-          }
-          
-          // 按文件名排序
-          pdfFiles.sort((a, b) => a.name.localeCompare(b.name));
-          
-          list.innerHTML = "";
-          pdfFiles.forEach(file => {
-            const item = document.createElement("div");
-            item.className = "note-item";
-            // 点击直接在新标签页打开
-            item.onclick = () => window.open(`./${file.path}`, '_blank');
-            
-            // 去掉 .pdf 后缀显示
-            const displayName = file.name.replace('.pdf', '');
-            
-            item.innerHTML = `
-              <div class="note-name" title="${displayName}">📄 ${displayName}</div>
-              <div class="note-date">Open ↗</div>
-            `;
-            list.appendChild(item);
-          });
-        });
-      }
+      folders.forEach(folder => {
+        const a = document.createElement("a");
+        // 点击直接跳转到 folder.html，并带上路径参数
+        a.href = `folder.html?path=${encodeURIComponent(folder.path)}`;
+        a.className = "category-card";
+        
+        a.innerHTML = `
+          <div class="category-title">📁 ${folder.name}</div>
+          <div class="category-desc">点击查看该分类下的所有 PDF 文档 →</div>
+        `;
+        container.appendChild(a);
+      });
     } catch (error) {
-      container.innerHTML = `<p class="muted" style="color:#f87171">加载失败: ${error.message}</p>`;
+      container.innerHTML = `<p style="color:#f87171">加载失败: ${error.message}</p>`;
     }
   }
 
-  // 侧边栏滚动高亮
-  const sections = document.querySelectorAll("header, section");
-  const navLinks = document.querySelectorAll(".nav a");
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.getAttribute("id");
-        navLinks.forEach(link => {
-          link.classList.remove("active");
-          if (link.getAttribute("href") === `#${id}`) link.classList.add("active");
-        });
-      }
-    });
-  }, { rootMargin: "-20% 0px -50% 0px" });
-  sections.forEach(section => observer.observe(section));
-
-  // 启动
-  initLibrary();
+  fetchCategories();
 </script>
 </body>
 </html>
